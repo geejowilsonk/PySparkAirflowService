@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+
+  airflow-webserver:
+    image: apache/airflow:latest
+    depends_on:
+      - postgres
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./pyspark_jobs:/opt/airflow/pyspark_jobs
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    entrypoint: ["bash", "-c", "airflow db init && airflow webserver"]
+    command: webserver
+
+
+  airflow-scheduler:
+    image: apache/airflow:latest
+    depends_on:
+      - airflow-webserver
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: ["bash", "-c", "airflow db init && airflow webserver"]
+    command: scheduler
+
+  spark:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"
+      - "8081:8081"
