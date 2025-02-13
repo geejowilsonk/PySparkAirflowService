@@ -42,6 +42,9 @@ services:
     image: bitnami/spark:latest
     environment:
       - SPARK_MODE=master
+    volumes:
+      - ./pyspark_jobs:/tmp/pyspark_jobs/
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "7077:7077"
       - "8081:8081"

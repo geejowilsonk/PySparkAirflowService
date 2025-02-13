@@ -1,9 +1,9 @@
-docker exec -it pysparkservice-airflow-webserver-1 bash -c "
+docker exec -it pysparkairflowservice-airflow-webserver-1 bash -c "
   airflow users create \
     --username admin \
     --password admin \
-    --firstname airflow \
-    --lastname airflow \
+    --firstname af_User \
+    --lastname af_User \
     --role Admin \
-    --email admin@example.org && \
+    --email admin@org.com && \
   airflow scheduler"
