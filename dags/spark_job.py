@@ -27,6 +27,7 @@ with DAG('simple_spark_job', schedule_interval=None, default_args=default_args, 
         docker_url='unix://var/run/docker.sock',
         network_mode='bridge',
         mounts=[
+            #This source absolute path has to be changed accordingly.
             Mount(source='/Users/gjo/PycharmProjects/PySparkAirflowService/pyspark_jobs', target='/opt/airflow/pyspark_jobs', type='bind')
         ],  # Mount DAGs folder to Spark container
     )

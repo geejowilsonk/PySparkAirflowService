@@ -18,7 +18,7 @@ default_args = {
 }
 
 dag = DAG(
-    'spark_job_trigger_dag2',
+    'spark_parallel_execution',
     default_args=default_args,
     description='A DAG that runs Spark jobs inside an existing Spark container',
     schedule_interval=None,
